@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import SearchBox from "./SearchBox";
-import CardList from "./CardList";
+import SearchBox from "../components/SearchBox";
+import CardList from "../components/CardList";
 
 import "./App.css";
-import Scroll from "./Scroll";
+import Scroll from "../components/Scroll";
 export default function App() {
   const [state, setState] = useState({
     robots: [],
@@ -23,7 +23,7 @@ export default function App() {
           setInitialStateState({ ...state, robots: users });
         });
     })();
-  });
+  }, []);
   const handleSearchChange = (value) => {
     const filteredRobots = initialState.robots.filter((a) =>
       a.name.toLowerCase().includes(value.toLowerCase())
