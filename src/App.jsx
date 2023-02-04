@@ -3,6 +3,7 @@ import SearchBox from "./SearchBox";
 import CardList from "./CardList";
 
 import "./App.css";
+import Scroll from "./Scroll";
 export default function App() {
   const [state, setState] = useState({
     robots: [],
@@ -38,7 +39,9 @@ export default function App() {
           searchField={state.searchField}
           searchChange={handleSearchChange}
         />
-        <CardList robots={state.robots} />
+        <Scroll>
+          <CardList robots={state.robots} />
+        </Scroll>
       </div>
     );
   else return <h1>Loading</h1>;
