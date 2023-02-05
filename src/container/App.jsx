@@ -4,45 +4,51 @@ import CardList from "../components/CardList";
 
 import "./App.css";
 import Scroll from "../components/Scroll";
-export default function App(props) {
-  const [state, setState] = useState({
-    robots: [],
-    searchField: "",
-  });
-  const [initialState, setInitialStateState] = useState({
-    robots: [],
-    searchField: "",
-  });
-  console.log(props.store.getState());
+import { connect } from "react-redux";
+import { setSearchField } from "../actions";
+function App(props) {
+  const [robots, setRobots] = useState([]);
+  const [searchField, setSearchField] = useState("");
+
   useEffect(() => {
     (async () => {
       fetch("https://jsonplaceholder.typicode.com/users")
         .then((res) => res.json())
         .then((users) => {
-          setState({ ...state, robots: users });
-          setInitialStateState({ ...state, robots: users });
+          setRobots(users);
         });
     })();
   }, []);
+
+  const filteredRobots = robots.filter((a) =>
+    a.name.toLowerCase().includes(searchField.toLowerCase())
+  );
+
   const handleSearchChange = (value) => {
-    const filteredRobots = initialState.robots.filter((a) =>
-      a.name.toLowerCase().includes(value.toLowerCase())
-    );
-    setState({ robots: filteredRobots, searchField: value });
+    setSearchField(value);
   };
 
-  if (state && state.robots.length)
+  if (filteredRobots.length)
     return (
       <div className="tc">
         <h1 className="f1">RoboFriends</h1>
         <SearchBox
-          searchField={state.searchField}
+          searchField={searchField}
           searchChange={handleSearchChange}
         />
         <Scroll>
-          <CardList robots={state.robots} />
+          <CardList robots={filteredRobots} />
         </Scroll>
       </div>
     );
   else return <h1>Loading</h1>;
 }
+
+// const mapStateToProps = (state) => ({
+//   searchFieldFromRedux: state.searchField,
+// });
+// const mapDispatchToProps = (dispatch) => {
+//   return { handleSearchChangeFromRedux: (v) => dispatch(setSearchField(v)) };
+// };
+// export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
