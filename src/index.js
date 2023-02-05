@@ -4,11 +4,16 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import "tachyons";
 import App from "./container/App";
+import { Provider, connect } from "react-redux";
+import { createStore } from "redux";
+import { searchRobots } from "./reducers";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const store = createStore(searchRobots);
 root.render(
   <React.StrictMode>
-    <App />
+    <App store={store} />
   </React.StrictMode>
 );
 

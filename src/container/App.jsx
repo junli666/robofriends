@@ -4,7 +4,7 @@ import CardList from "../components/CardList";
 
 import "./App.css";
 import Scroll from "../components/Scroll";
-export default function App() {
+export default function App(props) {
   const [state, setState] = useState({
     robots: [],
     searchField: "",
@@ -13,7 +13,7 @@ export default function App() {
     robots: [],
     searchField: "",
   });
-
+  console.log(props.store.getState());
   useEffect(() => {
     (async () => {
       fetch("https://jsonplaceholder.typicode.com/users")
