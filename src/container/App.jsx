@@ -5,23 +5,17 @@ import CardList from "../components/CardList";
 import "./App.css";
 import Scroll from "../components/Scroll";
 import { connect } from "react-redux";
-import { setSearchField } from "../actions";
+import { requestRobots, setSearchField } from "../actions";
 function App(props) {
-  const [robots, setRobots] = useState([]);
   // const [searchField, setSearchField] = useState("");
 
   console.log(props);
   useEffect(() => {
-    (async () => {
-      fetch("https://jsonplaceholder.typicode.com/users")
-        .then((res) => res.json())
-        .then((users) => {
-          setRobots(users);
-        });
-    })();
+    //(async () => props.onRequestRobotsFromRedux())();
+    props.onRequestRobotsFromRedux();
   }, []);
 
-  const filteredRobots = robots.filter((a) =>
+  const filteredRobots = props.robots?.filter((a) =>
     a.name.toLowerCase().includes(props.searchFieldFromRedux.toLowerCase())
   );
 
@@ -29,7 +23,7 @@ function App(props) {
   //   setSearchField(value);
   // };
 
-  if (filteredRobots.length)
+  if (!props.isPending)
     return (
       <div className="tc">
         <h1 className="f1">RoboFriends</h1>
@@ -46,9 +40,17 @@ function App(props) {
 }
 
 const mapStateToProps = (state) => ({
-  searchFieldFromRedux: state.searchField,
+  searchFieldFromRedux: state.searchRobots.searchField,
+  robots: state.requestRobots.robots,
+  isPending: state.requestRobots.isPending,
+  error: state.requestRobots.error,
 });
 const mapDispatchToProps = (dispatch) => {
-  return { handleSearchChangeFromRedux: (v) => dispatch(setSearchField(v)) };
+  return {
+    handleSearchChangeFromRedux: (v) => dispatch(setSearchField(v)),
+    //onRequestRobotsFromRedux: () => requestRobots(dispatch),
+    //onRequestRobotsFromRedux: () => requestRobots()(dispatch),
+    onRequestRobotsFromRedux: () => dispatch(requestRobots()),
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);
